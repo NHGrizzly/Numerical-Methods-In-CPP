@@ -7,7 +7,7 @@ namespace Algebra {
 // base namespace, change later
 
     class Expr {
-
+        std::string to_string();
     };
 
     class Monomial : public Expr {
@@ -38,25 +38,25 @@ namespace Algebra {
         }
 
         std::string to_string() {
-            std::string ret;
-            // floor((x * 100) + 0.5)/100;
+            std::string c, e;
 
-            if(this->_coeff == int(this->_coeff)){
-                ret = std::to_string(int(_coeff));
-            } else {
-                ret = std::to_string((((std::floor(_coeff) * 100) + 0.5) / 100));
+            c = std::to_string(_coeff);
+            while(c.find_last_of('0') == c.length()-1) {
+                c.pop_back();
             }
-           
-            ret += "x^";
+            if(c.back()=='.') {
+                c.pop_back();
+            }
 
-            if(this->_exponent == int(this->_exponent)){
-                ret += std::to_string(int(_exponent));
-            } else {
-                ret += "(";
-                ret += std::to_string((((std::floor(_exponent) * 100) + 0.5) / 100));
-                ret += ")";
+            e = std::to_string(_exponent);
+            while(e.find_last_of('0') == e.length()-1) {
+                e.pop_back();
             }
-            return ret;
+            if(e.back()=='.') {
+                e.pop_back();
+            }
+
+            return c + "x^" + e;
         }
 
         double exp() {
@@ -103,6 +103,19 @@ namespace Algebra {
                 return *this;
             }
         }
+
+        std::string to_string() {
+            std::map<double, Monomial>::iterator it = monos.begin(); // start at the beginning
+            if(it != monos.cend()) {
+                std::cout << it->second.to_string();
+                it++;
+            }
+            while(it != monos.cend()) {
+                std::cout << " + " << it->second.to_string();
+                it++;
+            }
+        }
+
     };
     
 }
